@@ -1,11 +1,8 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Target directory
+/target/
+!/.mvn/wrapper/maven-wrapper.jar
 
-### STS ###
+# STS (Spring Tool Suite)
 .apt_generated
 .classpath
 .factorypath
@@ -13,25 +10,44 @@ build/
 .settings
 .springBeans
 .sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
-### IntelliJ IDEA ###
-.idea
+# IntelliJ IDEA
+.idea/
 *.iws
 *.iml
 *.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
-### NetBeans ###
+# NetBeans
 /nbproject/private/
+/build/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# Eclipse
+/.classpath
+/.project
+/.settings/
+.bash_profile
+.bashrc
+.buildpath
+# bin (binaries)
+/bin/
+# tmp (temporary files)
+/tmp/
+
+# Maven
+log/
+*.log
+*.swp
+*.tmp
+*.DS_Store
+
+# Gradle
+.gradle
+build/
+
+# Other common files
+.DS_Store
+Thumbs.db
