@@ -16551,3 +16551,30 @@ ul {
     border-left: 3px solid rgba(255, 255, 255, 0.2); } }
 
 /*# sourceMappingURL=maps/style.css.map */
+
+@keyframes slideDown {
+  from {
+    top: 0;
+  }
+  to {
+    top: 10px;
+  }
+}
+
+.custom-toast{
+  position: absolute;
+  z-index: 99999999999999999999;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  animation: slideDown 0.5s ease-in-out forwards;
+}
+
+.custom-toast div.alert {
+  width: auto;
+  position: relative;
+}
+
+.btn i {
+  margin: 0;
+}
