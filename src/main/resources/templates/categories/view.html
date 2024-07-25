@@ -3,6 +3,7 @@
 
 <head>
     <title>Voir les détails de la catégorie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 </head>
 
 <body>
@@ -11,10 +12,16 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Détails de la catégorie</h4>
-                <p><strong>Identifiant:</strong> <span th:text="${category.id}"></span></p>
-                <p><strong>Nom:</strong> <span th:text="${category.name}"></span></p>
+                <p><strong>Identifiant:</strong> <span th:text="${category.id}">ID</span></p>
+                <p><strong>Nom:</strong> <span th:text="${category.name}">Nom</span></p>
                 <div class="mt-3">
                     <a th:href="@{/categories/index}" class="btn btn-primary">Retour à la liste</a>
+                    <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-warning">
+                        <i class="mdi mdi-pencil"></i> Modifier
+                    </a>
+                    <a th:href="@{/categories/delete/{id}(id=${category.id}, confirm=true)}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');" class="btn btn-danger">
+                        <i class="mdi mdi-delete"></i> Supprimer
+                    </a>
                 </div>
             </div>
         </div>

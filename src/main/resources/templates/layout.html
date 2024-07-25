@@ -54,8 +54,32 @@
         </div>
     </nav>
 
+    <div class="custom-toast" style="display: flex;justify-content: center">
+        <div th:if="${warning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span th:text="${warning}"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div th:if="${error != null}" class="alert alert-danger alert-dismissible fade show custom-toast" role="alert">
+            <span th:text="${error}"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div th:if="${success != null}" class="alert alert-success alert-dismissible fade show custom-toast" role="alert">
+            <span th:text="${success}"></span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
+
         <!-- partial:partials/_sidebar.html -->
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
@@ -79,9 +103,15 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{dashboard}">
+                    <a class="nav-link" th:href="@{/pages/dashboard}">
                         <i class="menu-icon mdi mdi-television"></i>
                         <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/categories/index}">
+                        <i class="menu-icon mdi mdi-view-list"></i>
+                        <span class="menu-title">Categories</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -102,7 +132,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{form-elements}">
+                    <a class="nav-link" th:href="@{/pages/form-elements}">
                         <i class="menu-icon mdi mdi-backup-restore"></i>
                         <span class="menu-title">Form elements</span>
                     </a>
@@ -114,7 +144,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{table-elements}">
+                    <a class="nav-link" th:href="@{/pages/table-elements}">
                         <i class="menu-icon mdi mdi-table"></i>
                         <span class="menu-title">Tables</span>
                     </a>
