@@ -77,13 +77,15 @@ public class CategoryService {
         restTemplate.postForObject(url, requestPayload, Void.class);
     }
 
-    public CategoriesResponse getCategories(int page, int size) {
+    public CategoriesResponse getCategories(int page, int size, String query) {
         String url = Constants.API_URL.concat("/categories");
-        int pageNumber = page;
-
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("page", pageNumber)
+                .queryParam("page", page)
                 .queryParam("limit", size);
+
+        if (query != null && !query.isEmpty()) {
+            uriBuilder.queryParam("q", query);
+        }
 
         String response = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
 
@@ -96,4 +98,5 @@ public class CategoryService {
             return null;
         }
     }
+
 }
