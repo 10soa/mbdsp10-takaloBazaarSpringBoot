@@ -3,6 +3,11 @@
 <head>
     <title>Liste catégories</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+    <script>
+        function resetPage() {
+            document.getElementById("pageInput").value = 1;
+        }
+    </script>
 </head>
 <body>
 <section layout:fragment="content">
@@ -18,6 +23,14 @@
                     <a th:href="@{/categories/insert}" class="btn btn-primary">
                         <i class="mdi mdi-plus"></i> Ajouter catégorie
                     </a>
+                </div>
+                <div class="mt-3">
+                    <form th:action="@{/categories/listCategory}" method="get" class="form-inline" style="justify-content: end" onsubmit="resetPage()">
+                        <input type="hidden" id="pageInput" name="page" th:value="${currentPage}" />
+                        <input type="hidden" name="size" th:value="${size}" />
+                        <input type="text" name="q" th:value="${q}" class="form-control mr-2" placeholder="Rechercher une catégorie">
+                        <button type="submit" class="btn btn-secondary">Rechercher</button>
+                    </form>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -50,23 +63,22 @@
                         <ul class="pagination justify-content-center">
                             <!-- Previous button -->
                             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{/categories/listCategory(page=${currentPage - 1}, size=${size})}" aria-label="Previous">
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${currentPage - 1}, size=${size}, q=${q})}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                             <!-- Page numbers -->
                             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{/categories/listCategory(page=${i}, size=${size})}" th:text="${i}">1</a>
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${i}, size=${size}, q=${q})}" th:text="${i}">1</a>
                             </li>
                             <!-- Next button -->
                             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                <a class="page-link" th:href="@{/categories/listCategory(page=${currentPage + 1}, size=${size})}" aria-label="Next">
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${currentPage + 1}, size=${size}, q=${q})}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         </ul>
                     </nav>
-
                 </div>
             </div>
         </div>

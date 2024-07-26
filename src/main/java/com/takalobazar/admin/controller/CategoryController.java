@@ -21,13 +21,15 @@ public class CategoryController {
     public String listCategories(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String q,
             Model model
     ) {
-        CategoriesResponse response = categoryService.getCategories(page, size);
+        CategoriesResponse response = categoryService.getCategories(page, size, q);
         model.addAttribute("categories", response.getCategories());
         model.addAttribute("totalPages", response.getTotalPages());
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
+        model.addAttribute("q", q);
         return "categories/index";
     }
 
