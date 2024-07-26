@@ -17,16 +17,18 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/index")
-    public ModelMap listCategories(
+    @GetMapping("/listCategory")
+    public String listCategories(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        ModelMap model = new ModelMap();
+            @RequestParam(defaultValue = "10") int size,
+            Model model
+    ) {
         CategoriesResponse response = categoryService.getCategories(page, size);
         model.addAttribute("categories", response.getCategories());
         model.addAttribute("totalPages", response.getTotalPages());
         model.addAttribute("currentPage", page);
-        return model;
+        model.addAttribute("size", size);
+        return "categories/index";
     }
 
     @GetMapping("/edit/{id}")
@@ -47,7 +49,7 @@ public class CategoryController {
     public String updateCategory(@ModelAttribute("category") Category category, RedirectAttributes redirectAttributes) {
         categoryService.updateCategory(category);
         redirectAttributes.addFlashAttribute("success", "Catégorie mise à jour avec succès !");
-        return "redirect:/categories/index";
+        return "redirect:/categories/listCategory";
     }
 
     @GetMapping("/delete/{id}")
@@ -68,7 +70,7 @@ public class CategoryController {
             return "redirect:/categories/confirm-delete/" + id; // Redirect to confirmation page
         }
 
-        return "redirect:/categories/index";
+        return "redirect:/categories/listCategory";
     }
 
     @GetMapping("/insert")
@@ -83,6 +85,6 @@ public class CategoryController {
         categoryService.saveCategory(category);
         model.clear();
         redirectAttributes.addFlashAttribute("success", "Catégorie créée avec succès !");
-        return "redirect:/categories/index";
+        return "redirect:/categories/listCategory";
     }
 }
