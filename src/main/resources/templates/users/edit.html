@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifier l'utilisateur</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Modifier l'utilisateur</h4>
+                <form th:action="@{/users/update}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" th:value="${user.id}" />
+
+                    <div class="form-group">
+                        <label for="username">Nom d'utilisateur</label>
+                        <input type="text" class="form-control" id="username" name="username" th:value="${user.username}" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" th:value="${user.email}" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="first_name">Prénom</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" th:value="${user.first_name}" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Nom</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" th:value="${user.last_name}" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Genre</label>
+                        <select class="form-control" id="gender" name="gender" required>
+                            <option th:selected="${user.gender == 'Male'}" value="Male">Masculin</option>
+                            <option th:selected="${user.gender == 'Female'}" value="Female">Féminin</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageFile">Image de profil actuelle</label>
+                        <div>
+                            <img th:src="${user.profile_picture}" alt="Profile Picture" style="border-radius: 50%; width: 100px; height: 100px;" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageFile">Nouvelle image de profil</label>
+                        <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" />
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                        <a th:href="@{/users/listUser}" class="btn btn-secondary">Annuler</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

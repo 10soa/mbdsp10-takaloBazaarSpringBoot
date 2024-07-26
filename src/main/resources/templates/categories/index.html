@@ -50,22 +50,23 @@
                         <ul class="pagination justify-content-center">
                             <!-- Previous button -->
                             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{/categories/index(page=${currentPage - 1}, size=10)}" aria-label="Previous">
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${currentPage - 1}, size=${size})}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                             <!-- Page numbers -->
                             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{/categories/index(page=${i}, size=10)}" th:text="${i}">1</a>
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${i}, size=${size})}" th:text="${i}">1</a>
                             </li>
                             <!-- Next button -->
                             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                <a class="page-link" th:href="@{/categories/index(page=${currentPage + 1}, size=10)}" aria-label="Next">
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${currentPage + 1}, size=${size})}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         </ul>
                     </nav>
+
                 </div>
             </div>
         </div>
