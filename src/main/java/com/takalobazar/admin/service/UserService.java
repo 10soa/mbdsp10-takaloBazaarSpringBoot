@@ -24,23 +24,25 @@ public class UserService {
         this.restTemplate = restTemplate;
     }
 
-    public UsersResponse getUsers(int page, int size) {
+    public UsersResponse getUsers(int page, int size, String q, String gender, String type) {
         String url = Constants.API_URL.concat("/users");
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("page", page)
-                .queryParam("limit", size);
+                .queryParam("limit", size)
+                .queryParam("search", q)
+                .queryParam("gender", gender)
+                .queryParam("type", type);
 
         String response = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
-        System.out.println(response);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(response, UsersResponse.class);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
             return null;
         }
     }
+
 
     public User getUserById(Integer id) {
         String url = Constants.API_URL.concat("/user/").concat(id.toString());
