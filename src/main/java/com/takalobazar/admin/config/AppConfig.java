@@ -10,9 +10,9 @@ import java.util.Collections;
 public class AppConfig {
 
     @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate restTemplate(AuthorizationHeaderInterceptor authorizationHeaderInterceptor) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setInterceptors(Collections.singletonList(new AuthorizationHeaderInterceptor()));
+        restTemplate.setInterceptors(Collections.singletonList(authorizationHeaderInterceptor));
         return restTemplate;
     }
 }
