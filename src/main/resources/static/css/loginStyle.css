@@ -1,0 +1,18 @@
+.button {
+    background: var(--main-color);
+    border-color: var(--main-color);
+}
+.title{
+    color: var(--third-color);
+}
+.sub-title{
+    color: var(--second-color);
+}
+.logo img{
+    width: 50%;
+}
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

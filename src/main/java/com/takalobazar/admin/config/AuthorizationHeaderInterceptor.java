@@ -1,17 +1,36 @@
 package com.takalobazar.admin.config;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class AuthorizationHeaderInterceptor implements ClientHttpRequestInterceptor {
+
+    private final HttpSession httpSession;
+
+    public AuthorizationHeaderInterceptor(HttpSession httpSession) {
+        this.httpSession = httpSession;
+    }
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        request.getHeaders().set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFzbWl0aEBleGFtcGxlLmNvbSIsImlkIjo1MSwiZmlyc3RfbmFtZSI6IkFsaWNlIiwibGFzdF9uYW1lIjoiQWxpY2UiLCJ1c2VybmFtZSI6ImFzbWl0aCIsInR5cGUiOiJBRE1JTiIsImp0aSI6IjUxLTE3MjIwMjEzNTE1MTAiLCJpYXQiOjE3MjIwMjEzNTEsImV4cCI6MTcyMjE5NDE1MX0.EK4KvDiScP_uiYIeRJVruMXblIsW5_JssGdcvXyqcRg");
-        return execution.execute(request, body);
+        String token = (String) httpSession.getAttribute("AUTH_TOKEN");
+        if (token != null && !token.isEmpty()) {
+            request.getHeaders().set("Authorization", "Bearer " + token);
+        }
+
+        ClientHttpResponse response = execution.execute(request, body);
+
+        if (response.getStatusCode().value() == 401) {
+            throw new UnauthorizedException("User needs to re-authenticate.");
+        }
+
+        return response;
     }
 }
