@@ -26,12 +26,18 @@ public class UserController {
     @GetMapping("/listUser")
     public String listUsers(@RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "10") int size,
+                            @RequestParam(required = false) String search,
+                            @RequestParam(required = false) String gender,
+                            @RequestParam(required = false) String type,
                             Model model) {
-        UsersResponse usersResponse = userService.getUsers(page, size);
+        UsersResponse usersResponse = userService.getUsers(page, size, search, gender, type);
         model.addAttribute("users", usersResponse.getUsers());
         model.addAttribute("currentPage", usersResponse.getCurrentPage());
         model.addAttribute("totalPages", usersResponse.getTotalPages());
         model.addAttribute("size", size);
+        model.addAttribute("search", search);
+        model.addAttribute("gender", gender);
+        model.addAttribute("type", type);
         return "users/index";
     }
 
