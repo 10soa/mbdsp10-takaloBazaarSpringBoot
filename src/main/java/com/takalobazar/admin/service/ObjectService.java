@@ -1,0 +1,64 @@
+package com.takalobazar.admin.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+public class ObjectService {
+
+    private final RestTemplate restTemplate;
+
+    public ObjectService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    public Object createObject(String name, String description, Integer categoryId, MultipartFile imageFile, Integer userId) throws IOException {
+        if (name == null || description == null || categoryId == null || imageFile == null || userId == null) {
+            throw new IllegalArgumentException("Invalid input parameters");
+        }
+
+        String url = Constants.API_URL.concat("/objects");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        String contentType = imageFile.getContentType();
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+        String base64Image = Base64.getEncoder().encodeToString(imageFile.getBytes());
+        String imageBase64 = "data:" + contentType + ";base64," + base64Image;
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("name", name);
+        requestBody.put("description", description);
+        requestBody.put("category_id", categoryId);
+        requestBody.put("image_file", imageBase64);
+        requestBody.put("user_id", userId);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = restTemplate.postForEntity(url, requestEntity, Object.class);
+        } catch (Exception e) {
+            throw new IOException("Error", e);
+        }
+
+        if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
+            return responseEntity.getBody();
+        } else {
+            throw new IOException("Error : " + responseEntity.getStatusCode());
+        }
+    }
+}

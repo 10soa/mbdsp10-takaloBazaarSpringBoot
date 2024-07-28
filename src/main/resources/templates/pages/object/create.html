@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Home</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Création d'un nouvel objet</h4>
+                    <p class="card-description"></p>
+                    <form class="forms-sample" action="/pages/object/create" enctype="multipart/form-data" method="post" id="create-object-form">
+                        <div class="form-group">
+                            <label for="exampleInputName1">Nom de l'objet</label>
+                            <input type="text" class="form-control" id="exampleInputName1" name="name" placeholder="Nom de l'objet" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail3">Description de l'objet</label>
+                            <input type="text" class="form-control" id="exampleInputEmail3" name="description" placeholder="Description de l'objet" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect2">Catégorie</label>
+                            <select class="form-control" id="exampleFormControlSelect2" name="category_id" required>
+                                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">Categorie</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect6">Utilisateur</label>
+                            <select class="form-control" id="exampleFormControlSelect6" name="user_id" required>
+                                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}">User</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" id="file-upload" class="file-upload-default" name="image_file" required>
+                            <div class="input-group col-xs-12">
+                                <input type="text" class="form-control file-upload-info" disabled placeholder="...">
+                                <span class="input-group-append">
+                                    <button class="file-upload-browse btn btn-info" type="button">Télécharger</button>
+                                </span>
+                            </div>
+                        </div>
+                        <img id="image-preview" src="" alt="Image Preview" style="display:none; width: 200px; height: auto;">
+                        <br>
+                        <script>
+                            document.querySelector('.file-upload-browse').addEventListener('click', function() {
+                                document.getElementById('file-upload').click();
+                            });
+
+                            document.getElementById('file-upload').addEventListener('change', function(event) {
+                                const file = event.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        document.querySelector('.file-upload-info').value = file.name;
+                                        const imagePreview = document.getElementById('image-preview');
+                                        imagePreview.src = e.target.result;
+                                        imagePreview.style.display = 'block';
+                                        const base64Image = e.target.result.split(',')[1];
+                                        document.getElementById('image-data').value = base64Image;
+                                    }
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        </script>
+                        <input type="hidden" id="image-data" name="image_file">
+                        <br>
+                        <div th:if="${error}" class="error">
+                            <p style="color: red;text-align: center" th:text="${error}"></p>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-success mr-2">Créer</button>
+                        <button class="btn btn-light">Annuler</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
