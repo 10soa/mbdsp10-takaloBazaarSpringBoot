@@ -1,4 +1,6 @@
-package com.takalobazar.admin.domain;
+package com.takalobazar.admin.domain.APIResponse;
+
+import com.takalobazar.admin.domain.User;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.takalobazar.admin.controller;
 
-import com.takalobazar.admin.domain.CategoriesResponse;
+import com.takalobazar.admin.domain.APIResponse.CategoriesResponse;
 import com.takalobazar.admin.domain.Category;
 import com.takalobazar.admin.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

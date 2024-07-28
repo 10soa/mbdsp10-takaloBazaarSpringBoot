@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Liste des rapports</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+    <script>
+        function resetPage() {
+            document.getElementById("pageInput").value = 1;
+        }
+    </script>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <div class="grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Liste des rapports</h4>
+                <p class="card-description">
+                    Voici la liste des tous les rapports:
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Identifiant de l'objet</th>
+                            <th>Nom de l'objet</th>
+                            <th>Nombre de rapports</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="report : ${reports}">
+                            <td th:text="${report.object_id}">Identifiant de l'objet</td>
+                            <td th:text="${report.object_name}">Nom de l'objet</td>
+                            <td th:text="${report.reportCount}">Nombre de rapports</td>
+                            <td>
+                                <a th:href="@{/reports/view/{id}(id=${report.object_id})}" class="btn btn-info btn-icon">
+                                    <i class="mdi mdi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous button -->
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/reports/listReports(page=${currentPage - 1}, limit=${limit})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <!-- Page numbers -->
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/reports/listReports(page=${i}, limit=${limit})}" th:text="${i}">1</a>
+                            </li>
+                            <!-- Next button -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{/reports/listReports(page=${currentPage + 1}, limit=${limit})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>
