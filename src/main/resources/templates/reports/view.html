@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Détails de l'objet</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+</head>
+<body>
+<section layout:fragment="content">
+
+    <div class="grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Détails de l'objet</h4>
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                <div class="media">
+                    <img th:src="${object.image}" class="mr-3" alt="Image de l'objet" style="max-width: 200px;">
+                    <div class="media-body">
+                        <h5 class="mt-0" th:text="${object.name}">Nom de l'objet</h5>
+                        <p th:text="${object.description}">Description</p>
+                        <p><strong>Catégorie:</strong> <span th:text="${object.category.name}"></span></p>
+                        <p><strong>Status:</strong> <span th:text="${object.status}"></span></p>
+                        <p>
+                            <strong>Posté par:</strong>
+                            <a th:href="@{/users/view/{id}(id=${object.user.id})}" th:text="${object.user.username}"></a>
+                            (<span th:text="${object.user.email}"></span>)
+                        </p>
+                    </div>
+                </div>
+
+                <h5 class="mt-4">Rapports associés</h5>
+
+                <div class="filter-section mb-4">
+                    <form th:action="@{/reports/view/{id}(id=${object.id})}" method="get" class="form-inline" style="justify-content: end">
+                        <i class="mdi mdi-filter" style="font-size: 24px; margin-right: 10px;"></i>
+                        <input type="hidden" name="id" th:value="${object.id}">
+                        <div class="form-group mr-2">
+                            <label for="created_at_start" class="sr-only">Date de début</label>
+                            <input type="date" th:value="${created_at_start}" id="created_at_start" name="created_at_start" class="form-control" placeholder="Date de début">
+                        </div>
+                        <div class="form-group mr-2">
+                            <label for="created_at_end" class="sr-only">Date de fin</label>
+                            <input type="date" th:value="${created_at_end}" id="created_at_end" name="created_at_end" class="form-control" placeholder="Date de fin">
+                        </div>
+                        <div class="form-group mr-2">
+                            <label for="reason" class="sr-only">Raison</label>
+                            <input type="text" th:value="${reason}" id="reason" name="reason" class="form-control" placeholder="Raison">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Filtrer</button>
+                    </form>
+                </div>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Identifiant</th>
+                        <th>Raison</th>
+                        <th>Date de création</th>
+                        <th>Rapporté par</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="report : ${reports}">
+                        <td th:text="${report.id}">Identifiant</td>
+                        <td th:text="${report.reason}">Raison</td>
+                        <td th:text="${#dates.format(report.created_at, 'dd/MM/yyyy HH:mm')}">Date de création</td>
+                        <td>
+                            <a th:href="@{/users/view/{id}(id=${report.user.id})}" th:text="${report.user.username}"></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

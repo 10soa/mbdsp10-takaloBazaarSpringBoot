@@ -1,4 +1,6 @@
-package com.takalobazar.admin.domain;
+package com.takalobazar.admin.domain.APIResponse;
+
+import com.takalobazar.admin.domain.Category;
 
 import java.util.List;
 

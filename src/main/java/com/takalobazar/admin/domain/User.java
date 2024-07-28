@@ -17,6 +17,8 @@ public class User {
     private String status;
     private Date deleted_at;
 
+    private Integer userId;
+
     // Getters and setters
     public Integer getId() {
         return id;

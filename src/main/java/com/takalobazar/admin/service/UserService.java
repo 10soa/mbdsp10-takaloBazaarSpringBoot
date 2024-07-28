@@ -3,7 +3,7 @@ package com.takalobazar.admin.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.takalobazar.admin.domain.User;
-import com.takalobazar.admin.domain.UsersResponse;
+import com.takalobazar.admin.domain.APIResponse.UsersResponse;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
