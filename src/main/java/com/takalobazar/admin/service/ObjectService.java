@@ -61,4 +61,47 @@ public class ObjectService {
             throw new IOException("Error : " + responseEntity.getStatusCode());
         }
     }
+
+    // Update Object
+    public Object updateObject(String id, String name, String description, Integer categoryId, MultipartFile imageFile) throws IOException {
+        String url = Constants.API_URL.concat("/objects/"+id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Map<String, Object> body = new HashMap<>();
+        body.put("name", name);
+        body.put("description", description);
+        body.put("category_id", categoryId);
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String contentType = imageFile.getContentType();
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+            String base64Image = Base64.getEncoder().encodeToString(imageFile.getBytes());
+            String imageBase64 = "data:" + contentType + ";base64," + base64Image;
+            body.put("image_file", imageBase64);
+        }
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.PUT, entity, Object.class);
+        return response.getBody();
+    }
+
+    // getOneObject
+    public Object getObjectById(String objectId) throws IOException {
+        String url = Constants.API_URL.concat("/object/").concat(objectId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<Object> responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Object.class);
+        } catch (Exception e) {
+            throw new IOException("Error fetching object details", e);
+        }
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            return responseEntity.getBody();
+        } else {
+            throw new IOException("Error: " + responseEntity.getStatusCode());
+        }
+    }
+
 }

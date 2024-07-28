@@ -38,7 +38,23 @@ public class ObjectController {
         modelMap.addAttribute("categories", categories);
         return modelMap;
     }
-    
+
+    @GetMapping(value = "update")
+    public ModelMap modelUpdate(@RequestParam("id") String id) {
+        List<User> users = userService.findAllUsers();
+        List<Category> categories = categoryService.findAllCategory();
+        ModelMap modelMap = new ModelMap();
+        try {
+            Object objectDetails = objectService.getObjectById("101");
+            modelMap.addAttribute("object", objectDetails);
+        } catch (IOException e) {
+            modelMap.addAttribute("error", "Erreur lors de la récupération des détails de l'objet!");
+        }
+        modelMap.addAttribute("users", users);
+        modelMap.addAttribute("categories", categories);
+        return modelMap;
+    }
+
     @PostMapping(value = "create")
     public String createObject(@RequestParam("name") String name,
                                @RequestParam("description") String description,
@@ -62,6 +78,22 @@ public class ObjectController {
             redirectAttributes.addFlashAttribute("categories", categories);
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la création de l'objet! Veuillez réessayer");
             return "redirect:/pages/object/create";
+        }
+    }
+
+    @PostMapping(value = "update")
+    public String updateObject(@RequestParam String id,
+                               @RequestParam String name,
+                               @RequestParam String description,
+                               @RequestParam Integer category_id,
+                               @RequestParam(required = false) MultipartFile image_file,
+                               ModelMap model) {
+        try {
+            objectService.updateObject(id, name, description, category_id,image_file);
+            return "redirect:/pages/object/list";
+        } catch (IOException e) {
+            model.addAttribute("error", "Failed to update object: " + e.getMessage());
+            return "pages/object/update";
         }
     }
 }
