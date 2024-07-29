@@ -9,19 +9,47 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class UserService {
-    private final RestTemplate restTemplate;
 
-    public UserService(RestTemplate restTemplate) {
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
+
+    public UserService(RestTemplate restTemplate, ObjectMapper mapper) {
         this.restTemplate = restTemplate;
+        this.objectMapper = mapper;
+    }
+
+    public List<User> findAllUsers() {
+        String url = Constants.API_URL.concat("/users");
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        String responseBody = response.getBody();
+        List<User> users = new ArrayList<>();
+        try {
+            JsonNode root = objectMapper.readTree(responseBody);
+            JsonNode usersNode = root.path("users");
+
+            if (usersNode.isArray()) {
+                for (JsonNode userNode : usersNode) {
+                    User user = objectMapper.treeToValue(userNode, User.class);
+                    users.add(user);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     public UsersResponse getUsers(int page, int size, String q, String gender, String type) {
@@ -43,7 +71,6 @@ public class UserService {
         }
     }
 
-
     public User getUserById(Integer id) {
         String url = Constants.API_URL.concat("/user/").concat(id.toString());
         String response = restTemplate.getForObject(url, String.class);
@@ -57,22 +84,6 @@ public class UserService {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public void updateUser(User user, String base64Image) {
-        String url = Constants.API_URL.concat("/user/").concat(user.getId().toString());
-        Map<String, Object> requestPayload = new HashMap<>();
-        requestPayload.put("username", user.getUsername());
-        requestPayload.put("email", user.getEmail());
-        requestPayload.put("first_name", user.getFirst_name());
-        requestPayload.put("last_name", user.getLast_name());
-        requestPayload.put("gender", user.getGender());
-
-        if (base64Image != null) {
-            requestPayload.put("image", base64Image);
-        }
-
-        restTemplate.put(url, requestPayload);
     }
 
     public void deleteUser(Integer id) {
@@ -99,5 +110,21 @@ public class UserService {
             }
             throw new RuntimeException(errorMessage);
         }
+    }
+
+    public void updateUser(User user, String base64Image) {
+        String url = Constants.API_URL.concat("/user/").concat(user.getId().toString());
+        Map<String, Object> requestPayload = new HashMap<>();
+        requestPayload.put("username", user.getUsername());
+        requestPayload.put("email", user.getEmail());
+        requestPayload.put("first_name", user.getFirst_name());
+        requestPayload.put("last_name", user.getLast_name());
+        requestPayload.put("gender", user.getGender());
+
+        if (base64Image != null) {
+            requestPayload.put("image", base64Image);
+        }
+
+        restTemplate.put(url, requestPayload);
     }
 }

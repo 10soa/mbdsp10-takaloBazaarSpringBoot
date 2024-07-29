@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Objets</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Liste des Objets</h4>
+                    <form method="get" action="#" th:action="@{/pages/object/liste}" class="form-inline mb-3">
+                        <input type="text" class="form-control mr-2" placeholder="Libelle" name="name" th:value="${param.name}">
+                        <input type="text" class="form-control mr-2" placeholder="Description" name="description" th:value="${param.description}">
+                        <select class="form-control mr-2" name="user_id" th:value="${param.user_id}">
+                            <option value="">Tous les utilisateurs</option>
+                            <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}" th:selected="${user.id == param.user_id}">User</option>
+                        </select>
+                        <select class="form-control mr-2" name="category_id" th:value="${param.category_id}">
+                            <option value="">Tous les Catégories</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${cat.id == param.category_id}">Catégorie</option>
+                        </select>
+                        <select class="form-control mr-2" name="status" th:value="${param.status}">
+                            <option value="">Tous les statuts</option>
+                            <option value="Available">Disponible</option>
+                            <option value="Removed">Indisponible</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Filtrer</button>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Libelle</th>
+                                <th>Description</th>
+                                <th>Image</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="object : ${objects}">
+                                <td th:text="${object.id}">ID</td>
+                                <td th:text="${object.name}">Libelle</td>
+                                <td th:text="${object.description}">Description</td>
+                                <td>
+                                    <img th:src="${object.image != null ? object.image : '/images/default.png'}" alt="Image Preview" style="width: 80px; height: 80px;" />
+                                </td>
+                                <td>
+                                    <label th:classappend="${object.status == 'Available' ? 'badge badge-success' : 'badge badge-danger'}" th:text="${object.status == 'Available' ? 'Disponible' : 'Indisponible'}">Status</label>
+                                </td>
+                                <td>
+                                    <button class="btn btn-secondary">Détail</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/pages/object/list(page=${currentPage - 1}, limit=${limit})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/pages/object/liste(page=${i}, limit=${limit})}" th:text="${i}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{/pages/object/liste(page=${currentPage + 1}, limit=${limit})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
