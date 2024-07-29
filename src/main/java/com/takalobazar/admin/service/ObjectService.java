@@ -1,6 +1,7 @@
 package com.takalobazar.admin.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
@@ -9,10 +10,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -104,4 +108,35 @@ public class ObjectService {
         }
     }
 
+    // getAllObjects + Filtre
+    public Map<String, Object> getObjects(Map<String, String> filters) throws IOException {
+        String url = Constants.API_URL.concat("/objects");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        builder.queryParam("limit", 10);
+        for (Map.Entry<String, String> filter : filters.entrySet()) {
+            builder.queryParam(filter.getKey(), filter.getValue());
+        }
+
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<Map<String, Object>> responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {});
+        } catch (Exception e) {
+            throw new IOException("Error fetching objects", e);
+        }
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            Map<String, Object> responseBody = responseEntity.getBody();
+            if (responseBody != null && responseBody.containsKey("data")) {
+                Map<String, Object> data = (Map<String, Object>) responseBody.get("data");
+                return data;
+            } else {
+                throw new IOException("Invalid response structure");
+            }
+        } else {
+            throw new IOException("Error: " + responseEntity.getStatusCode());
+        }
+    }
 }
