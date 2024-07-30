@@ -40,4 +40,11 @@ public class AuthentificationController {
             return "redirect:/authentification/login";
         }
     }
+
+    @PostMapping("/logout")
+    public String logout() {
+        authenticationService.logout();
+        return "redirect:/authentification/login";
+    }
+
 }

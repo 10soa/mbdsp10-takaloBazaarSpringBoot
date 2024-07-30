@@ -1,5 +1,6 @@
 package com.takalobazar.admin.controller;
 
+import com.takalobazar.admin.config.UnauthorizedException;
 import com.takalobazar.admin.domain.APIResponse.TypeReportsResponse;
 import com.takalobazar.admin.domain.Category;
 import com.takalobazar.admin.domain.TypeReport;
@@ -47,6 +48,9 @@ public class TypeReportController {
             redirectAttributes.addFlashAttribute("success", "Type de signalement mis à jour avec succès !");
             return "redirect:/typeReports";
         }
+        catch (UnauthorizedException e) {
+            throw e;
+        }
         catch(RuntimeException e){
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
@@ -88,6 +92,9 @@ public class TypeReportController {
             model.clear();
             redirectAttributes.addFlashAttribute("success", "Type de signalement créé avec succès !");
             return "redirect:/typeReports";
+        }
+        catch (UnauthorizedException e) {
+            throw e;
         }
         catch(RuntimeException e){
             redirectAttributes.addFlashAttribute("error", e.getMessage());

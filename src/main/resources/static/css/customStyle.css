@@ -1,5 +1,15 @@
-:root{
+:root {
     --main-color: #bc8246;
     --second-color: #8a8f6a;
     --third-color: #383838;
+}
+
+.btn-primary {
+    background: var(--main-color);
+    border-color: var(--main-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--third-color) !important;
+    border-color: var(--third-color) !important;
 }

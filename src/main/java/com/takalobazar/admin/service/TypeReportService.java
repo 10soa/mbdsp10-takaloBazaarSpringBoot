@@ -1,5 +1,6 @@
 package com.takalobazar.admin.service;
 
+import com.takalobazar.admin.config.UnauthorizedException;
 import org.springframework.http.HttpStatusCode;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +30,8 @@ public class TypeReportService {
         String url = Constants.API_URL.concat("/typeReports/").concat(typeReport.getId().toString());
         try {
             restTemplate.put(url, typeReport);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (HttpStatusCodeException e) {
             HttpStatusCode statusCode = e.getStatusCode();
             String errorMessage = "Error API " + e.getMessage();
@@ -53,6 +56,8 @@ public class TypeReportService {
         requestPayload.put("name", typeReport.getName());
         try {
             restTemplate.postForObject(url, requestPayload, Void.class);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (HttpStatusCodeException e) {
             HttpStatusCode statusCode = e.getStatusCode();
             String errorMessage = "Error API " + e.getMessage();
@@ -102,6 +107,8 @@ public class TypeReportService {
             if (response.getStatusCode() != HttpStatus.OK) {
                 throw new RuntimeException("Unexpected response status: " + response.getStatusCode());
             }
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (HttpStatusCodeException e) {
             String responseBody = e.getResponseBodyAsString();
             String errorMessage = "Unknown error occurred";

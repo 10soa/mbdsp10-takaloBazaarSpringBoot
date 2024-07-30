@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.base.css}">
     <link rel="stylesheet" th:href="@{/vendors/css/vendor.bundle.addons.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/customStyle.css}">
     <link rel="shortcut icon" th:href="@{/images/favicon.png}" />
 </head>
 
@@ -34,19 +35,23 @@
                     <li class="nav-item dropdown d-none d-xl-inline-block">
                         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
                             aria-expanded="false">
-                            <span class="profile-text">Hello, Richard V.Welsh !</span>
-                            <img class="img-xs rounded-circle" th:src="@{/images/faces/face1.jpg}" alt="Profile image">
+                            <span class="profile-text">
+                                Bonjour, <span th:text="${session.USER_PSEUDO}">User</span>!
+                            </span>
+                            <img class="img-xs rounded-circle"
+                                th:src="${session.USER_PROFILE_PICTURE != null ? session.USER_PROFILE_PICTURE : '/images/default-profile.jpg'}"
+                                alt="Profile image">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-                            <a class="dropdown-item mt-2">
-                                Manage Accounts
+                            <a class="dropdown-item mt-2" th:href="${'/users/view/' + session.USER_ID}">
+                                <i class="mdi mdi-account"></i> Voir mon profile
                             </a>
-                            <a class="dropdown-item">
-                                Change Password
+                            <a class="dropdown-item" th:href="@{/authentification/logout}"
+                                th:onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="mdi mdi-logout"></i> Déconnexion
                             </a>
-                            <a class="dropdown-item">
-                                Sign Out
-                            </a>
+                            <form id="logout-form" th:action="@{/authentification/logout}" method="post"
+                                style="display: none;"></form>
                         </div>
                     </li>
                 </ul>
@@ -148,7 +153,7 @@
                             <i class="menu-icon mdi mdi-alert"></i>
                             <span class="menu-title">Objets signalés</span>
                         </a>
-                    </li>                    
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false"
                             aria-controls="ui-basic">

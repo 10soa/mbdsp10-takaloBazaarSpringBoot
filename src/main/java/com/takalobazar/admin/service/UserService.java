@@ -2,6 +2,7 @@ package com.takalobazar.admin.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.takalobazar.admin.config.UnauthorizedException;
 import com.takalobazar.admin.domain.User;
 import com.takalobazar.admin.domain.APIResponse.UsersResponse;
 import org.springframework.http.HttpMethod;
@@ -65,6 +66,8 @@ public class UserService {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             return objectMapper.readValue(response, UsersResponse.class);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -80,6 +83,8 @@ public class UserService {
             JsonNode root = objectMapper.readTree(response);
             JsonNode userNode = root.path("user");
             return objectMapper.treeToValue(userNode, User.class);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -95,6 +100,8 @@ public class UserService {
             if (response.getStatusCode() != HttpStatus.OK) {
                 throw new RuntimeException("Unexpected response status: " + response.getStatusCode());
             }
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (HttpStatusCodeException e) {
             String responseBody = e.getResponseBodyAsString();
             String errorMessage = "Unknown error occurred";
