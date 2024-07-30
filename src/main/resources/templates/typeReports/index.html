@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Liste des Types de Signalements</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+    <script>
+        function resetPage() {
+            document.getElementById("pageInput").value = 1;
+        }
+    </script>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <style>
+        .form-inline .form-control {
+            width: 250px !important;
+        }
+    </style>
+    <div class="grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Liste des Types de Signalements</h4>
+                <div class="mt-3">
+                    <a th:href="@{/typeReports/insert}" class="btn btn-primary">
+                        <i class="mdi mdi-plus"></i> Ajouter un Nouveau Type de Signalement
+                    </a>
+                </div>
+                <div class="mt-3">
+                    <form th:action="@{/typeReports}" method="get" class="form-inline" style="justify-content: end" onsubmit="resetPage()">
+                        <input type="hidden" id="pageInput" name="page" th:value="${currentPage}" />
+                        <input type="hidden" name="size" th:value="${size}" />
+                        <input type="text" name="q" th:value="${q}" class="form-control mr-2" placeholder="Rechercher un type de signalement">
+                        <button type="submit" class="btn btn-secondary">Rechercher</button>
+                    </form>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Identifiant</th>
+                            <th>Nom</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="typeReport : ${typeReports}">
+                            <td th:text="${typeReport.id}">Identifiant</td>
+                            <td th:text="${typeReport.name}">Nom</td>
+                            <td>
+                                <a th:href="@{/typeReports/edit/{id}(id=${typeReport.id})} + ${'?name=' + typeReport.name}" class="btn btn-warning btn-icon">
+                                    <i class="mdi mdi-pencil"></i>
+                                </a>
+                                <a th:href="@{/typeReports/delete/{id}(id=${typeReport.id}, confirm=true)}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce type de signalement ?');" class="btn btn-danger btn-icon">
+                                    <i class="mdi mdi-delete"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Previous button -->
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{/typeReports(page=${currentPage - 1}, size=${size}, q=${q})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <!-- Page numbers -->
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${i}, size=${size}, q=${q})}" th:text="${i}">1</a>
+                            </li>
+                            <!-- Next button -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{/categories/listCategory(page=${currentPage + 1}, size=${size}, q=${q})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>
