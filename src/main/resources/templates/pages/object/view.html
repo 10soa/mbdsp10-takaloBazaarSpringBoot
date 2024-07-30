@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Détails de l'objet</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+</head>
+<body>
+<section layout:fragment="content">
+
+  <div class="grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Détails de l'objet</h4>
+        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+        <div class="media">
+          <div class="col-lg-5 media-body" >
+            <img th:src="${object.image}" class="mr-3" alt="Image de l'objet" style="width: 500px; height: 450px">
+          </div>
+          <div class="col-lg-7 media-body">
+            <h3 class="mt-0" th:text="${object.name}">Nom de l'objet</h3>
+            <h4 th:text="${object.description}">Description</h4>
+            <p><strong><h5>Catégorie :</h5></strong> <span th:text="${object.category.name}"></span></p>
+            <p><strong><h5>Status :</h5></strong> <span th:text="${object.status}"></span></p>
+            <p>
+              <strong><h5>Posté par :</h5></strong>
+              <a th:href="@{/users/view/{id}(id=${object.user.id})}" th:text="${object.user.username}"></a>
+              (<span th:text="${object.user.email}"></span>)
+            </p>
+            <div class="mt-3">
+              <a th:href="@{/pages/object/liste}" class="btn btn-secondary">Retour à la liste</a>
+              <a class="btn btn-warning" th:href="@{'/pages/object/update?id=' + ${object.id}}">
+                <i class="mdi mdi-pencil"></i> Modifier
+              </a>
+              <a class="btn btn-danger" th:if="${object.status != 'Removed'}" th:href="@{/pages/object/delete/{id}(id=${object.id}, confirm=true)}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet Objet ?');">
+                <i class="mdi mdi-delete"></i> Supprimer
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

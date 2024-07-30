@@ -11,6 +11,12 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Liste des Objets</h4>
+                    <div class="mt-3">
+                        <a th:href="@{/pages/object/create}" class="btn btn-primary">
+                            <i class="mdi mdi-plus"></i> Ajouter objet
+                        </a>
+                    </div>
+                    <br>
                     <form method="get" action="#" th:action="@{/pages/object/liste}" class="form-inline mb-3">
                         <input type="text" class="form-control mr-2" placeholder="Libelle" name="name" th:value="${param.name}">
                         <input type="text" class="form-control mr-2" placeholder="Description" name="description" th:value="${param.description}">
@@ -53,7 +59,9 @@
                                     <label th:classappend="${object.status == 'Available' ? 'badge badge-success' : 'badge badge-danger'}" th:text="${object.status == 'Available' ? 'Disponible' : 'Indisponible'}">Status</label>
                                 </td>
                                 <td>
-                                    <button class="btn btn-secondary">Détail</button>
+                                    <a class="btn btn-secondary" th:href="@{'/pages/object/view?id=' + ${object.id}}">
+                                        <i class="mdi mdi-pencil"></i> Détail
+                                    </a>
                                 </td>
                             </tr>
                             </tbody>

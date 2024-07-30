@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -47,7 +44,7 @@ public class ObjectController {
         List<Category> categories = categoryService.findAllCategory();
         ModelMap modelMap = new ModelMap();
         try {
-            Object objectDetails = objectService.getObjectById("101");
+            Object objectDetails = objectService.getObjectById(id);
             modelMap.addAttribute("object", objectDetails);
         } catch (IOException e) {
             modelMap.addAttribute("error", "Erreur lors de la récupération des détails de l'objet!");
@@ -121,6 +118,34 @@ public class ObjectController {
             model.addAttribute("error", "Failed to fetch objects: " + e.getMessage());
         }
         return "pages/object/liste";
+    }
+
+    @GetMapping(value = "view")
+    public ModelMap modelView(@RequestParam("id") String id) {
+        ModelMap modelMap = new ModelMap();
+        try {
+            Object objectDetails = objectService.getObjectById(id);
+            modelMap.addAttribute("object", objectDetails);
+        } catch (IOException e) {
+            modelMap.addAttribute("error", "Erreur lors de la récupération des détails de l'objet!");
+        }
+        return modelMap;
+    }
+
+    @GetMapping(value = "/delete/{id}")
+    public String removeObject(@PathVariable("id") String objectId, RedirectAttributes redirectAttributes, @RequestParam(value = "confirm",
+            required = false) Boolean confirm) {
+        if (Boolean.TRUE.equals(confirm)){
+            try {
+                objectService.removeObject(objectId);
+                redirectAttributes.addFlashAttribute("message", "Objet supprimer avec succes!");
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("error", "Suppression interrompu : " + e.getMessage());
+            }
+        }else{
+            redirectAttributes.addFlashAttribute("message", "Veuillez confirmer la suppression de cet Objet!");
+        }
+        return "redirect:/pages/object/view?id="+objectId;
     }
 }
 

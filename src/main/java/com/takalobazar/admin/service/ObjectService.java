@@ -139,4 +139,21 @@ public class ObjectService {
             throw new IOException("Error: " + responseEntity.getStatusCode());
         }
     }
+
+    // Remove Object
+    public void removeObject(String objectId) throws IOException {
+        String url = Constants.API_URL.concat("/object/").concat(objectId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<Map<String, Object>> responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {});
+        } catch (Exception e) {
+            throw new IOException("Error removing object", e);
+        }
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new IOException("Error: " + responseEntity.getStatusCode());
+        }
+    }
 }
