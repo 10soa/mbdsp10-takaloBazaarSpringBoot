@@ -1,7 +1,4 @@
-.button {
-    background: var(--main-color);
-    border-color: var(--main-color);
-}
+.button {}
 .title{
     color: var(--third-color);
 }

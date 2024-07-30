@@ -2,6 +2,7 @@ package com.takalobazar.admin.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.takalobazar.admin.config.UnauthorizedException;
 import com.takalobazar.admin.domain.APIResponse.CategoriesResponse;
 import com.takalobazar.admin.domain.Category;
 import org.springframework.http.HttpMethod;
@@ -82,6 +83,8 @@ public class CategoryService {
             if (response.getStatusCode() != HttpStatus.OK) {
                 throw new RuntimeException("Unexpected response status: " + response.getStatusCode());
             }
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (HttpStatusCodeException e) {
             String responseBody = e.getResponseBodyAsString();
             String errorMessage = "Unknown error occurred";
@@ -122,6 +125,8 @@ public class CategoryService {
         try {
             JsonNode dataNode = objectMapper.readTree(response).path("data");
             return objectMapper.treeToValue(dataNode, CategoriesResponse.class);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             return null;

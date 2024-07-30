@@ -1,5 +1,6 @@
 package com.takalobazar.admin.controller;
 
+import com.takalobazar.admin.config.UnauthorizedException;
 import com.takalobazar.admin.domain.User;
 import com.takalobazar.admin.domain.APIResponse.UsersResponse;
 import com.takalobazar.admin.service.UserService;
@@ -65,6 +66,9 @@ public class UserController {
             userService.updateUser(user, base64Image);
 
             redirectAttributes.addFlashAttribute("success", "Utilisateur mis à jour avec succès !");
+        }
+        catch (UnauthorizedException e) {
+            throw e;
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la conversion de l'image : " + e.getMessage());
         } catch (Exception e) {

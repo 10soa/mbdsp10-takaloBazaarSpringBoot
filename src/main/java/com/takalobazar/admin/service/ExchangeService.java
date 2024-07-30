@@ -1,6 +1,7 @@
 package com.takalobazar.admin.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.takalobazar.admin.config.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
@@ -45,6 +46,8 @@ public class ExchangeService {
         ResponseEntity<Map<String, Object>> responseEntity;
         try {
             responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {});
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
             throw new IOException("Error fetching objects", e);
         }
@@ -77,6 +80,8 @@ public class ExchangeService {
         ResponseEntity<Map<String, Object>> responseEntity;
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {});
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
             throw new IOException("Error fetching exchange", e);
         }

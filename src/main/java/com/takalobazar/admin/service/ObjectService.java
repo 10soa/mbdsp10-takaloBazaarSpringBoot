@@ -1,5 +1,6 @@
 package com.takalobazar.admin.service;
 
+import com.takalobazar.admin.config.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
@@ -55,6 +56,8 @@ public class ObjectService {
         ResponseEntity<Object> responseEntity;
         try {
             responseEntity = restTemplate.postForEntity(url, requestEntity, Object.class);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
             throw new IOException("Error", e);
         }
@@ -98,6 +101,8 @@ public class ObjectService {
         ResponseEntity<Object> responseEntity;
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Object.class);
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
             throw new IOException("Error fetching object details", e);
         }
@@ -123,6 +128,8 @@ public class ObjectService {
         ResponseEntity<Map<String, Object>> responseEntity;
         try {
             responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {});
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
             throw new IOException("Error fetching objects", e);
         }
@@ -149,6 +156,8 @@ public class ObjectService {
         ResponseEntity<Map<String, Object>> responseEntity;
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {});
+        } catch (UnauthorizedException e) {
+            throw e;
         } catch (Exception e) {
             throw new IOException("Error removing object", e);
         }
