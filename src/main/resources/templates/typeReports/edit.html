@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Modifier le type du signalement</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Modifier le type du signalement</h4>
+                <form th:action="@{/typeReports/edit}" th:object="${typeReport}" method="post">
+                    <input type="hidden" th:field="*{id}">
+                    <div class="form-group">
+                        <label for="name">Nom</label>
+                        <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Type du signalement">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <a th:href="@{/typeReports}" class="btn btn-secondary">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
