@@ -2,6 +2,7 @@ package com.takalobazar.admin.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.takalobazar.admin.domain.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -19,10 +20,12 @@ public class AuthenticationService {
 
     private final RestTemplate restTemplate;
     private final HttpSession httpSession;
+    private final UserService userService;
 
-    public AuthenticationService(RestTemplate restTemplate, HttpSession httpSession) {
+    public AuthenticationService(RestTemplate restTemplate, HttpSession httpSession, UserService userService) {
         this.restTemplate = restTemplate;
         this.httpSession = httpSession;
+        this.userService = userService;
     }
 
     public boolean login(String username, String password) throws Exception {
@@ -47,8 +50,21 @@ public class AuthenticationService {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(responseBody);
                 String token = jsonNode.path("admin").path("token").asText();
+                int userId = jsonNode.path("admin").path("id").asInt();
+
+                // Store the token in session
                 httpSession.removeAttribute("NEEDS_REAUTHENTICATION");
                 httpSession.setAttribute("AUTH_TOKEN", token);
+
+                // Fetch user details
+                User user = userService.getUserById(userId);
+                if (user != null) {
+                    httpSession.setAttribute("USER_ID", user.getId());
+                    httpSession.setAttribute("USER_PSEUDO", user.getUsername());
+                    httpSession.setAttribute("USER_EMAIL", user.getEmail());
+                    httpSession.setAttribute("USER_PROFILE_PICTURE", user.getProfile_picture());
+                }
+
                 return true;
             } else {
                 throw new Exception(extractErrorMessage(responseEntity.getBody()));
@@ -57,6 +73,17 @@ public class AuthenticationService {
             throw new Exception(extractErrorMessage(e.getResponseBodyAsString()), e);
         } catch (Exception e) {
             throw new Exception("An error occurred during login: " + e.getMessage(), e);
+        }
+    }
+
+    public void logout() {
+        String url = Constants.API_URL.concat("/auth/logout");
+        try {
+            restTemplate.postForObject(url, null, Void.class);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            httpSession.invalidate();
         }
     }
 
