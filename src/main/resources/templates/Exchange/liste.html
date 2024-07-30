@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Echanges</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Liste des Echanges</h4>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Proposeur</th>
+                                <th>Receveur</th>
+                                <th>Crée le </th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="exchange : ${exchanges}">
+                                <td th:text="${exchange.id}">ID</td>
+                                <td th:text="${exchange.proposer.username}">Proposeur</td>
+                                <td th:text="${exchange.receiver.username}">Receveur</td>
+                                <td th:text="${exchange.created_at}">Created At</td>
+                                <td>
+                                    <label th:classappend="${exchange.status == 'Accepted' ? 'badge badge-success' : (exchange.status == 'Cancelled' ? 'badge badge-danger' : 'badge badge-warning')}"
+                                           th:text="${exchange.status == 'Accepted' ? 'Accepté' : (exchange.status == 'Cancelled' ? 'Annulé' : 'Proposé')}">Status</label>
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary" th:href="@{'/Exchange/view/' + ${exchange.id}}">
+                                        <i class="mdi mdi-eye"></i> Détail
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                                <a class="page-link" th:href="@{'/Exchange/liste?page=' + (${currentPage - 1})}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link" th:href="@{'/Exchange/liste?page=' + ${i}}" th:text="${i}">1</a>
+                            </li>
+                            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                                <a class="page-link" th:href="@{'/Exchange/liste?page=' + (${currentPage + 1})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
