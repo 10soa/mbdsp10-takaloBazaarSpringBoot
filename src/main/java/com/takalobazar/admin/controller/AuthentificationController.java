@@ -30,7 +30,7 @@ public class AuthentificationController {
             boolean authenticated = authenticationService.login(username, password);
             if (authenticated) {
                 // Set up session or other necessary actions
-                return "redirect:/pages/dashboard";
+                return "redirect:/dashboard";
             } else {
                 redirectAttributes.addFlashAttribute("loginError", "Erreur inattendu, veuillez nous contacter si cela persiste");
                 return "redirect:/authentification/login";
