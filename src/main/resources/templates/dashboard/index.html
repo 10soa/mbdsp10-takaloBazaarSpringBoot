@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .clearfix{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .font-weight-medium.text-center.mb-0{
+            margin-top: 10px;
+        }
+        .card .card-body {
+            padding: 14px !important;
+        }
+        .col-xl-6.grid-margin.stretch-card.cat{
+            background: white;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-xl-6 grid-margin stretch-card">
+            <div class="row">
+                <div class="col-xl-6 grid-margin stretch-card">
+                    <div class="card card-statistics">
+                    <div class="card-body">
+                        <div class="clearfix">
+                            <div class="float-left">
+                                <i class="mdi mdi-timer-sand text-warning icon-lg"></i>
+                            </div>
+                            <div class="float-right">
+                                <p class="mb-0 text-right">Nombre d'échanges en cours</p>
+                                <div class="fluid-container">
+                                    <h3 class="font-weight-medium text-warning text-center mb-0" th:text="${ongoingExchanges}">Nombre d'échange en cours</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-muted mt-3 mb-0">
+                            <i class="mdi mdi-swap-horizontal mr-1" aria-hidden="true"></i> <span th:text="${ongoingExchanges}"> echange </span> échanges en cours
+                        </p>
+                    </div>
+                </div>
+                </div>
+                <div class="col-xl-6 grid-margin stretch-card">
+            <div class="card card-statistics">
+                <div class="card-body">
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <i class="mdi mdi-check-circle text-success icon-lg"></i>
+                        </div>
+                        <div class="float-right">
+                            <p class="mb-0 text-right">Nombre d'échanges validés</p>
+                            <div class="fluid-container">
+                                <h3 class="font-weight-medium text-success text-center mb-0" th:text="${acceptedExchanges}">Nombre d'échange en cours</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-muted mt-3 mb-0">
+                        <i class="mdi mdi-swap-horizontal mr-1" aria-hidden="true"></i> <span th:text="${acceptedExchanges}"> echange </span> échanges validés
+                    </p>
+                </div>
+            </div>
+        </div>
+                <div class="col-xl-6 grid-margin stretch-card">
+                    <div class="card card-statistics">
+                        <div class="card-body">
+                            <div class="clearfix">
+                                <div class="float-left">
+                                    <i class="mdi mdi-cancel text-primary icon-lg"></i>
+                                </div>
+                                <div class="float-right">
+                                    <p class="mb-0 text-right">Nombre d'échanges annulés</p>
+                                    <div class="fluid-container">
+                                        <h3 class="font-weight-medium text-primary text-center mb-0" th:text="${cancelledExchanges}">Nombre d'échange en cours</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-muted mt-3 mb-0">
+                                <i class="mdi mdi-swap-horizontal mr-1" aria-hidden="true"></i> <span th:text="${cancelledExchanges}"> echange </span> échanges annulés
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 grid-margin stretch-card">
+                    <div class="card card-statistics">
+                        <div class="card-body">
+                            <div class="clearfix">
+                                <div class="float-left">
+                                    <i class="mdi mdi-close-circle text-danger icon-lg"></i>
+                                </div>
+                                <div class="float-right">
+                                    <p class="mb-0 text-right">Nombre d'échanges refusés</p>
+                                    <div class="fluid-container">
+                                        <h3 class="font-weight-medium text-danger text-center mb-0" th:text="${refusedExchanges}">Nombre d'échange en cours</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-muted mt-3 mb-0">
+                                <i class="mdi mdi-swap-horizontal mr-1" aria-hidden="true"></i> <span th:text="${refusedExchanges}"> echange </span> échanges refusés
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 grid-margin stretch-card cat">
+            <div class="container">
+                <!-- <h6>Nombre des objets par catégorie</h6> -->
+                <canvas id="pieChart"></canvas>
+            </div>
+
+            <script th:inline="javascript">
+                var objectsByCategory = /*[[${objectsByCategory}]]*/ [];
+
+                console.log("soaaa",objectsByCategory)
+
+                var labels = objectsByCategory.map(function(item) {
+                    return item.name;
+                });
+
+                var counts = objectsByCategory.map(function(item) {
+                    return item.object_count;
+                });
+
+                var ctx = document.getElementById('pieChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: counts,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(199, 199, 199, 0.2)',
+                                'rgba(83, 102, 255, 0.2)',
+                                'rgba(255, 205, 86, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(199, 199, 199, 1)',
+                                'rgba(83, 102, 255, 1)',
+                                'rgba(255, 205, 86, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Nombre des objets par catégorie'
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Les 10 Utilisateurs Ayant Réalisé le Plus d'Échanges</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                   Pseudo
+                                </th>
+                                <th>
+                                    Échanges réalisés
+                                </th>
+                                <th>Pourcentage d'Échanges Réalisés</th>
+                                <th>Proportion des Échanges</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr  th:each="exchange, iterStat : ${exchangesByUser}">
+                                <td class="font-weight-medium">
+                                    <span th:text="${iterStat.index + 1}">1</span>
+                                </td>
+                                <td th:text="${exchange.username}">
+                                  username
+                                </td>
+                                <td th:text="${exchange.exchange_count}">
+                                   echange
+                                </td>
+                                <td th:text="${exchange.percentage + '%'}"
+                                    th:class="'text-' +
+                    (${exchange.percentage} < 10 ? 'danger' :
+                    (${exchange.percentage} <= 20 ? 'warning' :
+                    (${exchange.percentage} < 40 ? 'primary' : 'success')))">
+                                    pourcentage
+                                </td>
+                                <td class="text-danger">
+                                    <div class="progress">
+                                        <div th:class="'progress-bar progress-bar-striped ' +
+                        (${exchange.percentage} < 10 ? 'bg-danger' :
+                        (${exchange.percentage} <= 20 ? 'bg-warning' :
+                        (${exchange.percentage} < 40 ? 'bg-primary' : 'bg-success')))"
+                                             role="progressbar"
+                                             th:style="'width:' + ${exchange.percentage} + '%;'"
+                                             th:aria-valuenow="${exchange.percentage}"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>
