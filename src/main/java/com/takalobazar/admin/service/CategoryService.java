@@ -71,7 +71,24 @@ public class CategoryService {
 
     public void updateCategory(Category category) {
         String url = Constants.API_URL.concat("/categories/").concat(category.getId().toString());
-        restTemplate.put(url, category);
+
+        try {
+            restTemplate.put(url, category);
+        } catch (HttpStatusCodeException e) {
+            String responseBody = e.getResponseBodyAsString();
+            String errorMessage = "Unknown error occurred";
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode root = objectMapper.readTree(responseBody);
+                JsonNode messageNode = root.path("error");
+                if (!messageNode.isMissingNode()) {
+                    errorMessage = messageNode.asText();
+                }
+            } catch (Exception jsonException) {
+                jsonException.printStackTrace();
+            }
+            throw new RuntimeException(errorMessage);
+        }
     }
 
     public void deleteCategory(Integer id) {
@@ -106,7 +123,27 @@ public class CategoryService {
         String url = Constants.API_URL.concat("/categories");
         Map<String, String> requestPayload = new HashMap<>();
         requestPayload.put("category", category.getName());
-        restTemplate.postForObject(url, requestPayload, Void.class);
+
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestPayload, String.class);
+            if (responseEntity.getStatusCode() != HttpStatus.OK) {
+                throw new RuntimeException("Unexpected response status: " + responseEntity.getStatusCode());
+            }
+        } catch (HttpStatusCodeException e) {
+            String responseBody = e.getResponseBodyAsString();
+            String errorMessage = "Unknown error occurred";
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                JsonNode root = objectMapper.readTree(responseBody);
+                JsonNode messageNode = root.path("error");
+                if (!messageNode.isMissingNode()) {
+                    errorMessage = messageNode.asText();
+                }
+            } catch (Exception jsonException) {
+                jsonException.printStackTrace();
+            }
+            throw new RuntimeException(errorMessage);
+        }
     }
 
     public CategoriesResponse getCategories(int page, int size, String query) {

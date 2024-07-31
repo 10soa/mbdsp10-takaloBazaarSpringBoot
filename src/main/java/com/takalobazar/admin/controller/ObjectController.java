@@ -133,19 +133,22 @@ public class ObjectController {
     }
 
     @GetMapping(value = "/delete/{id}")
-    public String removeObject(@PathVariable("id") String objectId, RedirectAttributes redirectAttributes, @RequestParam(value = "confirm",
-            required = false) Boolean confirm) {
-        if (Boolean.TRUE.equals(confirm)){
+    public String removeObject(@PathVariable("id") String objectId,
+                               RedirectAttributes redirectAttributes,
+                               @RequestParam(value = "confirm", required = false) Boolean confirm,
+                               @RequestParam(value = "redirectUrl", required = false) String redirectUrl) {
+        if (Boolean.TRUE.equals(confirm)) {
             try {
                 objectService.removeObject(objectId);
-                redirectAttributes.addFlashAttribute("message", "Objet supprimer avec succes!");
+                redirectAttributes.addFlashAttribute("message", "Objet supprimé avec succès !");
             } catch (IOException e) {
-                redirectAttributes.addFlashAttribute("error", "Suppression interrompu : " + e.getMessage());
+                redirectAttributes.addFlashAttribute("error", "Suppression interrompue : " + e.getMessage());
             }
-        }else{
-            redirectAttributes.addFlashAttribute("message", "Veuillez confirmer la suppression de cet Objet!");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Veuillez confirmer la suppression de cet objet !");
         }
-        return "redirect:/pages/object/view?id="+objectId;
+        return redirectUrl != null && !redirectUrl.isEmpty() ? "redirect:" + redirectUrl : "redirect:/pages/object/view?id=" + objectId;
     }
+
 }
 

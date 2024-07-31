@@ -49,9 +49,14 @@ public class CategoryController {
 
     @PostMapping("/edit")
     public String updateCategory(@ModelAttribute("category") Category category, RedirectAttributes redirectAttributes) {
-        categoryService.updateCategory(category);
-        redirectAttributes.addFlashAttribute("success", "Catégorie mise à jour avec succès !");
-        return "redirect:/categories/listCategory";
+        try {
+            categoryService.updateCategory(category);
+            redirectAttributes.addFlashAttribute("success", "Catégorie mise à jour avec succès !");
+            return "redirect:/categories/listCategory";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/categories/edit/" + category.getId();
+        }
     }
 
     @GetMapping("/delete/{id}")
@@ -83,10 +88,14 @@ public class CategoryController {
     }
 
     @PostMapping("/insert")
-    public String insertCategory(@ModelAttribute("category") Category category, ModelMap model, RedirectAttributes redirectAttributes) {
-        categoryService.saveCategory(category);
-        model.clear();
-        redirectAttributes.addFlashAttribute("success", "Catégorie créée avec succès !");
-        return "redirect:/categories/listCategory";
+    public String insertCategory(@ModelAttribute("category") Category category, RedirectAttributes redirectAttributes) {
+        try {
+            categoryService.saveCategory(category);
+            redirectAttributes.addFlashAttribute("success", "Catégorie créée avec succès !");
+            return "redirect:/categories/listCategory";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/categories/insert";
+        }
     }
 }

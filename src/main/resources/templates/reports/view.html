@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Détails de l'objet</title>
+    <title>Détails de l'objet signalé</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 </head>
 <body>
@@ -24,6 +24,16 @@
                             <strong>Posté par:</strong>
                             <a th:href="@{/users/view/{id}(id=${object.user.id})}" th:text="${object.user.username}"></a>
                             (<span th:text="${object.user.email}"></span>)
+                        </p>
+                        <p th:if="${object.deleted_At != null}">
+                            <strong>Effacé le:</strong> <span th:text="${#dates.format(object.deleted_At, 'dd/MM/yyyy HH:mm')}"></span>
+                        </p>
+                        <p th:if="${object.deleted_At == null}">
+                            <a th:href="@{/pages/object/delete/{id}(id=${object.id}, confirm=true, redirectUrl='/reports/view/' + ${object.id})}"
+                               class="btn btn-danger"
+                               onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet objet ?');">
+                                <i class="mdi mdi-delete"></i> Supprimer objet
+                            </a>
                         </p>
                     </div>
                 </div>
