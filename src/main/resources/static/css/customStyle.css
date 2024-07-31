@@ -13,3 +13,7 @@
     background-color: var(--third-color) !important;
     border-color: var(--third-color) !important;
 }
+
+.navbar-menu-wrapper{
+    background: linear-gradient(120deg,var(--main-color),#a56e3e,var(--main-color)) !important;
+}
