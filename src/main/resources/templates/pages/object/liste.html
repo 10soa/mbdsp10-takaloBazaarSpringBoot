@@ -21,17 +21,17 @@
                         <input type="text" class="form-control mr-2" placeholder="Libelle" name="name" th:value="${param.name}">
                         <input type="text" class="form-control mr-2" placeholder="Description" name="description" th:value="${param.description}">
                         <select class="form-control mr-2" name="user_id" th:value="${param.user_id}">
-                            <option value="" th:selected="${param.user_id==null}">Tous les utilisateurs</option>
-                            <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}" th:selected="${user.id.toString() == param.user_id.toString()}">User</option>
+                            <option value="">Tous les utilisateurs</option>
+                            <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.username}" th:selected="${user.id == param.user_id}">User</option>
                         </select>
                         <select class="form-control mr-2" name="category_id" th:value="${param.category_id}">
                             <option value="">Tous les Catégories</option>
-                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${cat.id.toString() == param.category_id.toString()}">Catégorie</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${param.category_id == cat.id}">Catégorie</option>
                         </select>
-                        <select class="form-control mr-2" name="status" th:value="${param.status.toString()}">
-                            <option value="" th:selected="${param.status.toString() == null}">Tous les statuts</option>
-                            <option th:selected="${param.status.toString() == 'Available'}" value="Available">Disponible</option>
-                            <option th:selected="${param.status.toString() == 'Removed'}" value="Removed">Indisponible</option>
+                        <select class="form-control mr-2" name="status" th:value="${param.status}">
+                            <option value="">Tous les statuts</option>
+                            <option value="Available">Disponible</option>
+                            <option value="Removed">Indisponible</option>
                         </select>
                         <button type="submit" class="btn btn-primary">Filtrer</button>
                     </form>
