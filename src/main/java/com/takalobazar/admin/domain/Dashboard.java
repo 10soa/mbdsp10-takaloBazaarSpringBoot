@@ -70,7 +70,7 @@ public class Dashboard {
     public static class ObjectByCategory {
         private int id;
         private String name;
-        private int object_count;  // Changer le type en int
+        private int object_count;
 
         public int getId() {
             return id;
@@ -98,23 +98,32 @@ public class Dashboard {
     }
 
     public static class ExchangeBetweenDates {
-        private int year;
-        private int exchange_count;  // Changer le type en int
+        private String type;
+        private String period;
+        private int exchange_count;
 
         public int getExchange_count() {
             return exchange_count;
-        }
-
-        public int getYear() {
-            return year;
         }
 
         public void setExchange_count(int exchange_count) {
             this.exchange_count = exchange_count;
         }
 
-        public void setYear(int year) {
-            this.year = year;
+        public String getPeriod() {
+            return period;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setPeriod(String period) {
+            this.period = period;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
     }
 

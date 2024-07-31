@@ -22,11 +22,18 @@ public class DashboardService {
         this.restTemplate = restTemplate;
     }
 
-    public Dashboard getDashboard() {
+    public Dashboard getDashboard(String date1, String date2, String statut) {
         String url = Constants.API_URL.concat("/dashboard");
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("status", "Accepted");
-
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url);
+        if (date1 != null && !date1.isEmpty()) {
+            uriBuilder.queryParam("date1", date1);
+        }
+        if (date2 != null && !date2.isEmpty()) {
+            uriBuilder.queryParam("date2", date2);
+        }
+        if (statut != null && !statut.isEmpty()) {
+            uriBuilder.queryParam("status", statut);
+        }
         String response = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
 
         ObjectMapper objectMapper = new ObjectMapper();
