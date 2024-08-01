@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "pages/object")
+@RequestMapping(value = "object")
 public class ObjectController {
 
     @Autowired
@@ -69,14 +69,14 @@ public class ObjectController {
             modelMap.addAttribute("categories", categories);
             Object createdObject = objectService.createObject(name, description, categoryId, imageFile, userId);
             modelMap.addAttribute("createdObject", createdObject);
-            return "redirect:/pages/object/listeObject";
+            return "redirect:/object/listeObject";
         } catch (IOException e) {
             List<User> users = userService.findAllUsers();
             List<Category> categories = categoryService.findAllCategory();
             redirectAttributes.addFlashAttribute("users", users);
             redirectAttributes.addFlashAttribute("categories", categories);
             redirectAttributes.addFlashAttribute("error", "Erreur lors de la création de l'objet! Veuillez réessayer");
-            return "redirect:/pages/object/create";
+            return "redirect:/object/create";
         }
     }
 
@@ -89,10 +89,10 @@ public class ObjectController {
                                ModelMap model) {
         try {
             objectService.updateObject(id, name, description, category_id,image_file);
-            return "redirect:/pages/object/listeObject";
+            return "redirect:/object/listeObject";
         } catch (IOException e) {
             model.addAttribute("error", "Failed to update object: " + e.getMessage());
-            return "pages/object/update";
+            return "object/update";
         }
     }
 
@@ -117,7 +117,7 @@ public class ObjectController {
             model.addAttribute("categories", categories);
             model.addAttribute("error", "Failed to fetch objects: " + e.getMessage());
         }
-        return "/pages/object/listeObject";
+        return "/object/listeObject";
     }
 
     @GetMapping(value = "view")
@@ -147,7 +147,7 @@ public class ObjectController {
         } else {
             redirectAttributes.addFlashAttribute("message", "Veuillez confirmer la suppression de cet objet !");
         }
-        return redirectUrl != null && !redirectUrl.isEmpty() ? "redirect:" + redirectUrl : "redirect:/pages/object/view?id=" + objectId;
+        return redirectUrl != null && !redirectUrl.isEmpty() ? "redirect:" + redirectUrl : "redirect:/object/view?id=" + objectId;
     }
 
 }
