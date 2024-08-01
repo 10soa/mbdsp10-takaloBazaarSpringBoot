@@ -46,15 +46,15 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{'/Exchange/liste?page=' + (${currentPage - 1})}" aria-label="Previous">
+                                <a class="page-link" th:href="@{'/Exchange/listeExchange?page=' + (${currentPage - 1})}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{'/Exchange/liste?page=' + ${i}}" th:text="${i}">1</a>
+                                <a class="page-link" th:href="@{'/Exchange/listeExchange?page=' + ${i}}" th:text="${i}">1</a>
                             </li>
                             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                <a class="page-link" th:href="@{'/Exchange/liste?page=' + (${currentPage + 1})}" aria-label="Next">
+                                <a class="page-link" th:href="@{'/Exchange/listeExchange?page=' + (${currentPage + 1})}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>

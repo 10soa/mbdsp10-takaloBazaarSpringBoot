@@ -15,7 +15,6 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Détails de l'objet</h4>
-        <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
         <div class="media">
           <div class="col-lg-5 media-body" >
             <img th:src="${object.image}" class="mr-3" alt="Image de l'objet" style="width: 350px;">
@@ -35,7 +34,7 @@
               <a class="btn btn-warning" th:href="@{'/pages/object/update?id=' + ${object.id}}">
                 <i class="mdi mdi-pencil"></i> Modifier
               </a>
-              <a class="btn btn-danger" th:if="${object.status != 'Removed'}" th:href="@{/pages/object/delete/{id}(id=${object.id}, confirm=true)}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet Objet ?');">
+              <a class="btn btn-danger" th:if="${object.status != 'Deleted'}" th:href="@{/pages/object/delete/{id}(id=${object.id}, confirm=true)}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet Objet ?');">
                 <i class="mdi mdi-delete"></i> Supprimer
               </a>
             </div>

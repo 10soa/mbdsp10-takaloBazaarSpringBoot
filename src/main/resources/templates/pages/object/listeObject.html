@@ -31,7 +31,7 @@
                         <select class="form-control mr-2" name="status" th:value="${param.status}">
                             <option value="">Tous les statuts</option>
                             <option value="Available">Disponible</option>
-                            <option value="Removed">Indisponible</option>
+                            <option value="Removed">Retiré</option>
                         </select>
                         <button type="submit" class="btn btn-primary">Filtrer</button>
                     </form>
@@ -56,7 +56,10 @@
                                     <img th:src="${object.image != null ? object.image : '/images/default.png'}" alt="Image Preview" style="width: 80px; height: 80px;" />
                                 </td>
                                 <td>
-                                    <label th:classappend="${object.status == 'Available' ? 'badge badge-success' : 'badge badge-danger'}" th:text="${object.status == 'Available' ? 'Disponible' : 'Indisponible'}">Status</label>
+                                    <label th:classappend="${object.status == 'Available' ? 'badge badge-success' : (object.status == 'Removed' ? 'badge badge-warning' : 'badge badge-danger')}"
+                                           th:text="${object.status == 'Available' ? 'Disponible' : (object.status == 'Removed' ? 'Retiré' : 'Supprimé')}">
+                                        Status
+                                    </label>
                                 </td>
                                 <td>
                                     <a class="btn btn-secondary" th:href="@{'/pages/object/view?id=' + ${object.id}}">
@@ -70,15 +73,15 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
                             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                                <a class="page-link" th:href="@{/pages/object/list(page=${currentPage - 1}, limit=${limit})}" aria-label="Previous">
+                                <a class="page-link" th:href="@{/pages/object/listeObject(page=${currentPage - 1}, limit=${limit})}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                             <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
-                                <a class="page-link" th:href="@{/pages/object/liste(page=${i}, limit=${limit})}" th:text="${i}">1</a>
+                                <a class="page-link" th:href="@{/pages/object/listeObject(page=${i}, limit=${limit})}" th:text="${i}">1</a>
                             </li>
                             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                                <a class="page-link" th:href="@{/pages/object/liste(page=${currentPage + 1}, limit=${limit})}" aria-label="Next">
+                                <a class="page-link" th:href="@{/pages/object/listeObject(page=${currentPage + 1}, limit=${limit})}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>

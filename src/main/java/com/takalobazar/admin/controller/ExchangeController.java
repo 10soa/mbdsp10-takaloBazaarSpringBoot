@@ -24,7 +24,7 @@ public class ExchangeController {
     @Autowired
     private ExchangeService exchangeService;
 
-    @GetMapping(value = "liste")
+    @GetMapping(value = "listeExchange")
     public String listExchange(@RequestParam Map<String, String> filters, Model model) {
         try {
             Map<String, Object> response = exchangeService.getExchanges(filters);
@@ -36,7 +36,7 @@ public class ExchangeController {
                 currentPage = Integer.parseInt(currentPageString);
             } catch (NumberFormatException e) {
                 model.addAttribute("error", "Invalid number format for currentPage: " + e.getMessage());
-                return "Exchange/liste";
+                return "Exchange/listeExchange";
             }
             model.addAttribute("exchanges", objects);
             model.addAttribute("totalPages", totalPages);
@@ -44,7 +44,7 @@ public class ExchangeController {
         } catch (IOException e) {
             model.addAttribute("error", "Failed to fetch Exchanges: " + e.getMessage());
         }
-        return "Exchange/liste";
+        return "Exchange/listeExchange";
     }
 
     @GetMapping(value = "view/{id}")

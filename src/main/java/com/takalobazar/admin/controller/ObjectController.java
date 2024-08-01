@@ -69,7 +69,7 @@ public class ObjectController {
             modelMap.addAttribute("categories", categories);
             Object createdObject = objectService.createObject(name, description, categoryId, imageFile, userId);
             modelMap.addAttribute("createdObject", createdObject);
-            return "redirect:/pages/object/create";
+            return "redirect:/pages/object/listeObject";
         } catch (IOException e) {
             List<User> users = userService.findAllUsers();
             List<Category> categories = categoryService.findAllCategory();
@@ -89,14 +89,14 @@ public class ObjectController {
                                ModelMap model) {
         try {
             objectService.updateObject(id, name, description, category_id,image_file);
-            return "redirect:/pages/object/list";
+            return "redirect:/pages/object/listeObject";
         } catch (IOException e) {
             model.addAttribute("error", "Failed to update object: " + e.getMessage());
             return "pages/object/update";
         }
     }
 
-    @GetMapping(value = "liste")
+    @GetMapping(value = "listeObject")
     public String listObjects(@RequestParam Map<String, String> filters, Model model) {
         try {
             Map<String, Object> response = objectService.getObjects(filters);
@@ -117,7 +117,7 @@ public class ObjectController {
             model.addAttribute("categories", categories);
             model.addAttribute("error", "Failed to fetch objects: " + e.getMessage());
         }
-        return "pages/object/liste";
+        return "/pages/object/listeObject";
     }
 
     @GetMapping(value = "view")
