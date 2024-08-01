@@ -117,7 +117,7 @@ public class ObjectController {
             model.addAttribute("categories", categories);
             model.addAttribute("error", "Failed to fetch objects: " + e.getMessage());
         }
-        return "/object/listeObject";
+        return "object/listeObject";
     }
 
     @GetMapping(value = "view")
