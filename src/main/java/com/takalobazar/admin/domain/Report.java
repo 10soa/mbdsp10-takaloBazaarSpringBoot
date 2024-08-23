@@ -1,5 +1,6 @@
 package com.takalobazar.admin.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
@@ -64,6 +65,7 @@ public class Report {
         this.user = user;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class User {
         private int id;
         private String username;
