@@ -1,5 +1,6 @@
 package com.takalobazar.admin.domain.APIResponse;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.takalobazar.admin.domain.Category;
 import com.takalobazar.admin.domain.Report;
 
@@ -157,6 +158,7 @@ public class ReportDetailResponse {
             this.category_id = category_id;
         }
 
+        @JsonIgnoreProperties(ignoreUnknown = true)
         public static class User {
             private int id;
             private String username;
