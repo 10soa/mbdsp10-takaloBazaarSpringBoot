@@ -19,7 +19,7 @@
                         <h5 class="mt-0" th:text="${object.name}">Nom de l'objet</h5>
                         <p th:text="${object.description}">Description</p>
                         <p><strong>Catégorie:</strong> <span th:text="${object.category.name}"></span></p>
-                        <p><strong>Status:</strong> <span th:text="${object.status}"></span></p>
+                        <p><strong>Status:</strong> <span th:text="${object.status == 'Available' ? 'Disponible' : (object.status == 'Removed' ? 'Retiré' : 'Supprimé')}"></span></p>
                         <p>
                             <strong>Posté par:</strong>
                             <a th:href="@{/users/view/{id}(id=${object.user.id})}" th:text="${object.user.username}"></a>
@@ -80,6 +80,28 @@
                     </tr>
                     </tbody>
                 </table>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Previous button -->
+                        <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/reports/view/{id}(id=${object.id}, page=${currentPage - 1}, created_at_start=${created_at_start}, created_at_end=${created_at_end}, reason=${reason})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <!-- Page numbers -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">
+                            <a class="page-link" th:href="@{/reports/view/{id}(id=${object.id}, page=${i}, created_at_start=${created_at_start}, created_at_end=${created_at_end}, reason=${reason})}" th:text="${i}">1</a>
+                        </li>
+                        <!-- Next button -->
+                        <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                            <a class="page-link" th:href="@{/reports/view/{id}(id=${object.id}, page=${currentPage + 1}, created_at_start=${created_at_start}, created_at_end=${created_at_end}, reason=${reason})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
             </div>
         </div>

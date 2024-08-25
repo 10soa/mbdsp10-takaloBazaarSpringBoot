@@ -47,9 +47,10 @@ public class ReportController {
             @RequestParam(required = false) String created_at_start,
             @RequestParam(required = false) String created_at_end,
             @RequestParam(required = false) String reason,
+            @RequestParam(defaultValue = "1") int page,
             Model model) {
         try {
-            ReportDetailResponse response = reportService.getReportDetails(id, created_at_start, created_at_end, reason);
+            ReportDetailResponse response = reportService.getReportDetails(id, created_at_start, created_at_end, reason, page);
             model.addAttribute("object", response.getObject());
             model.addAttribute("reports", response.getReports());
             model.addAttribute("currentPage", response.getCurrentPage());
@@ -64,4 +65,5 @@ public class ReportController {
         }
         return "reports/view";
     }
+
 }

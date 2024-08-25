@@ -43,9 +43,9 @@ public class ReportService {
         return reportResponse;
     }
 
-    public ReportDetailResponse getReportDetails(int objectId, String createdAtStart, String createdAtEnd, String reason) throws Exception {
+    public ReportDetailResponse getReportDetails(int objectId, String createdAtStart, String createdAtEnd, String reason, Integer page) throws Exception {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(API_URL.concat("/object/") + objectId + "/reports");
-
+    
         if (createdAtStart != null && !createdAtStart.isEmpty()) {
             uriBuilder.queryParam("created_at_start", createdAtStart);
         }
@@ -55,9 +55,13 @@ public class ReportService {
         if (reason != null && !reason.isEmpty()) {
             uriBuilder.queryParam("reason", reason);
         }
-
+        if (page != null) {
+            uriBuilder.queryParam("page", page);
+        }
+    
         String response = restTemplate.getForObject(uriBuilder.toUriString(), String.class);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(response, ReportDetailResponse.class);
     }
+    
 }
