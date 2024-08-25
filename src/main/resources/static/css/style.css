@@ -13937,6 +13937,10 @@ input:focus {
   -webkit-transition: width 0.25s ease, background 0.25s ease;
   -moz-transition: width 0.25s ease, background 0.25s ease;
   -ms-transition: width 0.25s ease, background 0.25s ease; }
+  .sidebar.hidden {
+    transform: translateX(-100%);
+    width: 0;
+  }
   .sidebar .nav {
     overflow: hidden;
     flex-wrap: nowrap;
@@ -14169,13 +14173,13 @@ input:focus {
     height: 63px; }
     @media (max-width: 991px) {
       .navbar.default-layout .navbar-menu-wrapper {
-        width: auto; } }
+        flex-grow: 1; } }
     .navbar.default-layout .navbar-menu-wrapper .navbar-toggler {
       border: 0;
       color: inherit; }
       @media (max-width: 991px) {
         .navbar.default-layout .navbar-menu-wrapper .navbar-toggler:not(.navbar-toggler-right) {
-          display: none; } }
+           } }
     .navbar.default-layout .navbar-menu-wrapper .navbar-text {
       font-size: 13px; }
     .navbar.default-layout .navbar-menu-wrapper .navbar-nav {

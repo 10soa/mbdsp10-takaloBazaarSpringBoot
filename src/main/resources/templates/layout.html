@@ -23,10 +23,14 @@
                     <img th:src="@{/images/brand/logo-no-background.png}" alt="logo" />
                 </a>
                 <a class="navbar-brand brand-logo-mini" href="index.html">
-                    <img th:src="@{/images/logo-mini.svg}" alt="logo" />
+                    <img th:src="@{/images/brand/favicon-32x32.png}" alt="logo" />
                 </a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center">
+                <button class="navbar-toggler navbar-toggler d-lg-block navbar-dark align-self-center mr-3"
+                    type="button" data-toggle="minimize">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item dropdown d-none d-xl-inline-block">
                         <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
@@ -87,13 +91,14 @@
         <div class="container-fluid page-body-wrapper">
 
             <!-- partial:partials/_sidebar.html -->
-            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <nav class="sidebar hide-mobile" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item nav-profile">
                         <div class="nav-link">
                             <div class="user-wrapper">
                                 <div class="profile-image">
-                                    <img th:src="${session.USER_PROFILE_PICTURE != null ? session.USER_PROFILE_PICTURE : '/images/default-profile.jpg'}" alt="profile image">
+                                    <img th:src="${session.USER_PROFILE_PICTURE != null ? session.USER_PROFILE_PICTURE : '/images/default-profile.jpg'}"
+                                        alt="profile image">
                                 </div>
                                 <div class="text-wrapper">
                                     <p class="profile-name" th:text="${session.USER_PSEUDO}"></p>
@@ -165,9 +170,9 @@
                             <a href="https://github.com/mathieu29nick" target="_blank">
                                 mathieu29nick </a>,
                             <a href="https://github.com/10soa" target="_blank"> 10Soa,</a>
-                                    <a href="https://github.com/JessicaWilson-7" target="_blank"> Jess,</a>
-                                    <a href="https://github.com/manoaLoic" target="_blank">ManoaLoic</a>
-                           </span>
+                            <a href="https://github.com/JessicaWilson-7" target="_blank"> Jess,</a>
+                            <a href="https://github.com/manoaLoic" target="_blank">ManoaLoic</a>
+                        </span>
                     </div>
                 </footer>
                 <!-- partial -->
@@ -189,6 +194,15 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
+            const sidebar = document.getElementById('sidebar');
+            const toggleButton = document.querySelector('.navbar-toggler');
+            const mainContent = document.querySelector('.main-panel');
+
+            toggleButton.addEventListener('click', function () {
+                sidebar.classList.toggle('hidden');
+                mainContent.classList.toggle('full');
+                toggleButton.querySelector('.navbar-toggler-icon').classList.toggle('rotated');
+            });
 
             funApplicationDisabled();
 
